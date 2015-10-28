@@ -17,6 +17,10 @@ module BackTrackingSolver {
 			return this.x + "x" + this.y;
 		}
 
+		toFancyString(): string {
+			return "(" + (this.y + 1) + "; " + (this.x + 1) + ")";
+		}
+
 		neighbor(direction: Direction): Coord {
 			switch(direction) {
 				case Direction.Up:
