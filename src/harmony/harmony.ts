@@ -83,13 +83,9 @@ module Harmony {
 			newState.cells[p1].dots--;
 			newState.cells[p2].dots--;
 
-			var tmp = newState.cells[p1].line;
-			newState.cells[p1].line = newState.cells[p2].line;
-			newState.cells[p2].line = tmp;
-
-			tmp = newState.cells[p1].dots;
-			newState.cells[p1].dots = newState.cells[p2].dots;
-			newState.cells[p2].dots = tmp;
+			var tmp = newState.cells[p1];
+			newState.cells[p1] = newState.cells[p2];
+			newState.cells[p2] = tmp;
 
 			return newState;
 		}
