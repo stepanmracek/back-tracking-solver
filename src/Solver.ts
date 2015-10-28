@@ -6,27 +6,33 @@ module BackTrackingSolver {
 		constructor(private game: IGame) { }
 
 		private solution: IMove[];
+		private counter: number;
 
 		public solve(state: BackTrackingSolver.IState): IMove[] {
 			this.solution = undefined;
+			this.counter = 0;
 			this.backTrackingSolve(state, []);
 			return this.solution;
 		}
 
-		public applySolution(state: BackTrackingSolver.IState, moves: IMove[] ) {
+		public applySolution(state: BackTrackingSolver.IState, moves: IMove[] ): BackTrackingSolver.IState {
 			moves.forEach(function(move) {
 				console.log(move.toString());
 				state = this.game.apply(state, move);
 				console.log(state.toString());
 			}, this);
+			return state;
 		}
 
 		private backTrackingSolve(state: BackTrackingSolver.IState, currentMoves: IMove[]) {
-			
-			console.log("Backtracking depth: " + currentMoves.length);
+			this.counter++;
+			if (this.counter % 10000 == 0) {
+				console.log(this.counter + "; depth: " + currentMoves.length);
+				//console.log(state.toString());
+			}
 
 			if (this.game.isRejectState(state)) {
-				console.log("Dead end");
+				//console.log("Dead end");
 				return;
 			}
 			if (this.game.isAcceptState(state)) {
