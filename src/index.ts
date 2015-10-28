@@ -128,12 +128,12 @@ state.setCells([
 	{ coord: '4x5', cell: { color: Puralax.Colors.Green, dots: 0 } }
 ]);*/
 
-/*var game = new Hanoi.Game();
-var state = new Hanoi.State(3);*/
+var game = new Hanoi.Game();
+var state = new Hanoi.State(3);
 
-var game = new Sudoku.Game();
+//var game = new Sudoku.Game();
 //var state = new Sudoku.State(16);
-var state = new Sudoku.State(9);
+//var state = new Sudoku.State(9);
 /*state.items = {
 	'1x0': 1, '4x0': 4,
 	'2x1': 4, '3x1': 8, '8x1': 9,
@@ -145,7 +145,7 @@ var state = new Sudoku.State(9);
 	'0x7': 4, '5x7': 8, '6x7': 9,
 	'4x8': 6, '7x8': 2
 };*/
-state.items = {
+/*state.items = {
 	'0x0': 8,
 	'2x1': 3, '3x1': 6,
 	'1x2': 7, '4x2': 9, '6x2': 2,
@@ -155,17 +155,16 @@ state.items = {
 	'2x6': 1, '7x6': 6, '8x6': 8,
 	'2x7': 8, '3x7': 5, '7x7': 1,
 	'1x8': 9, '6x8': 4
-}
+}*/
 
 console.log(state.toString());
 var startState = state.clone();
 var solver = new BackTrackingSolver.Solver(game);
 
-var moves = solver.solve(startState);
-if (moves)
-	solver.applySolution(startState, moves);
+var solution = solver.bfsSolve(state);
+//var solution = solver.solve(startState);
+
+if (solution)
+	solver.applySolution(startState, solution);
 else
 	console.log("No solution found");
-
-//solver.applySolution(state, solution);
-
