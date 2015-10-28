@@ -12,7 +12,7 @@ module Puralax {
 		constructor(public point: BackTrackingSolver.Coord, public direction: BackTrackingSolver.Direction) {}
 
 		toString(): string {
-			return this.point.toString() + ": " + direction2char(this.direction);
+			return this.point.toFancyString() + ": " + direction2char(this.direction);
 		}
 	}
 
