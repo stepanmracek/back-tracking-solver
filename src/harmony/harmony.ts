@@ -8,7 +8,7 @@ module Harmony {
 		constructor(public point1: BackTrackingSolver.Coord, public point2: BackTrackingSolver.Coord) {}
 
 		toString(): string {
-			return this.point1.toString() + " <-> " + this.point2.toString();
+			return this.point1.toFancyString() + " <-> " + this.point2.toFancyString();
 		}
 	}
 
@@ -19,17 +19,17 @@ module Harmony {
 
 	export class State implements BackTrackingSolver.IState {
 
-		colors: { [coord: string]: ICell }
+		cells: { [coord: string]: ICell }
 
 		constructor(public size: number) {
-			this.colors = {};
+			this.cells = {};
 		}		
 
 		toString(): string {
 			var result: string = "";
 			for (var y = 0; y < this.size; y++) {
 				for (var x = 0; x < this.size; x++) {
-					var cell = this.colors[x + "x" + y];
+					var cell = this.cells[x + "x" + y];
 					result += cell.line + "(" + cell.dots + ") ";
 				}
 				result += "\n";
@@ -43,8 +43,8 @@ module Harmony {
 			for (var y = 0; y < this.size; y++) {
 				for (var x = 0; x < this.size; x++) {
 					var key = x + "x" + y;
-					var cell = this.colors[key];
-					result.colors[key] = { line: cell.line, dots: cell.dots };
+					var cell = this.cells[key];
+					result.cells[key] = { line: cell.line, dots: cell.dots };
 				}
 			}
 			return result;
@@ -57,7 +57,7 @@ module Harmony {
 			for (var y = 0; y < state.size; y++) {
 				for (var x = 0; x < state.size; x++) {
 					var key = x + "x" + y;
-					var cell = state.colors[key];
+					var cell = state.cells[key];
 					if ((cell.dots > 0) || (y != cell.line)) return false;
 				}
 			}
@@ -68,7 +68,7 @@ module Harmony {
 			for (var y = 0; y < state.size; y++) {
 				for (var x = 0; x < state.size; x++) {
 					var key = x + "x" + y;
-					var cell = state.colors[key];
+					var cell = state.cells[key];
 					if (y != cell.line && cell.dots == 0) return true;
 				}
 			}
@@ -80,12 +80,16 @@ module Harmony {
 
 			var p1 = move.point1.toString();
 			var p2 = move.point2.toString();
-			newState.colors[p1].dots--;
-			newState.colors[p2].dots--;
+			newState.cells[p1].dots--;
+			newState.cells[p2].dots--;
 
-			var tmp = newState.colors[p1].line;
-			newState.colors[p1].line = newState.colors[p2].line;
-			newState.colors[p2].line = tmp;
+			var tmp = newState.cells[p1].line;
+			newState.cells[p1].line = newState.cells[p2].line;
+			newState.cells[p2].line = tmp;
+
+			tmp = newState.cells[p1].dots;
+			newState.cells[p1].dots = newState.cells[p2].dots;
+			newState.cells[p2].dots = tmp;
 
 			return newState;
 		}
@@ -97,19 +101,19 @@ module Harmony {
 				for (var x = 0; x < state.size; x++) {
 
 					var key1 = x + "x" + y;
-					var cell1 = state.colors[key1];
+					var cell1 = state.cells[key1];
 					if (cell1.dots == 0) continue;
 
 					for (var x2 = x + 1; x2 < state.size; x2++) {
 						var key2 = x2 + "x" + y;
-						var cell2 = state.colors[key2];
+						var cell2 = state.cells[key2];
 						if (cell2.dots > 0)
 							result.push(new Move(new BackTrackingSolver.Coord(x, y), new BackTrackingSolver.Coord(x2, y)));
 					}
 
 					for (var y2 = y + 1; y2 < state.size; y2++) {
 						var key2 = x + "x" + y2;
-						var cell2 = state.colors[key2];
+						var cell2 = state.cells[key2];
 						if (cell2.dots > 0)
 							result.push(new Move(new BackTrackingSolver.Coord(x, y), new BackTrackingSolver.Coord(x, y2)));
 					}
